@@ -13,11 +13,16 @@ RUN apt-get update && apt-get install -y \
     npm \
     && rm -rf /var/lib/apt/lists/*
 
+# Odoo kaynağını indir
 RUN git clone --depth 1 --branch 18.0 https://github.com/odoo/odoo.git /opt/odoo
 
 WORKDIR /opt/odoo
 
-RUN pip install -r odoo/requirements.txt
+# Önce gevent paketini doğru sürüme getiriyoruz
+RUN pip install "gevent>=22.10.0"
+
+# Sonra normal requirements'ı kuruyoruz
+RUN pip install -r requirements.txt
 
 ENV HOST 0.0.0.0
 ENV PORT 8069
