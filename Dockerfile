@@ -15,19 +15,22 @@ RUN apt-get update && apt-get install -y \
     node-less \
     && rm -rf /var/lib/apt/lists/*
 
-# 1. Odoo kaynak kodunu resmi repodan çekiyoruz
+# Odoo kaynak kodunu resmi repodan çekiyoruz
 RUN git clone --depth 1 --branch 18.0 https://github.com/odoo/odoo.git /opt/odoo
 
-# 2. Senin GitHub repondan requirements.txt dosyasını geçici bir yere indiriyoruz
-# Burada URL'yi senin doğru dosya URL'inle değiştireceğiz
+# Kendi requirements.txt dosyamızı indiriyoruz (geçici yere)
 RUN curl -o /tmp/requirements.txt https://raw.githubusercontent.com/mstfkrdnz/odoo18docker/main/requirements.txt
 
-# 3. Geçici yere indirdiğimiz dosyayla orijinal requirements.txt'yi değiştiriyoruz
+# Odoo requirements.txt dosyasını değiştiriyoruz
 RUN cp /tmp/requirements.txt /opt/odoo/requirements.txt
 
-# 4. pip install
+# Pip'i güncelliyoruz
 RUN pip install --upgrade pip
+
+# Buraya dikkat: önce "gevent>=22.10.2" fix yüklemesi yapıyoruz
 RUN pip install "gevent>=22.10.2"
+
+# Sonra requirements.txt'deki her şeyi yüklüyoruz
 RUN pip install --no-cache-dir -r /opt/odoo/requirements.txt
 
 # Çalışma dizinini ayarlıyoruz
