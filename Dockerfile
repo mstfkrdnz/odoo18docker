@@ -21,7 +21,8 @@ RUN git clone --depth 1 --branch 18.0 https://github.com/odoo/odoo.git /opt/odoo
 COPY requirements.txt /opt/odoo/requirements.txt
 
 # Requirements dosyasını yükle
-RUN pip install --upgrade pip && pip install -r /opt/odoo/requirements.txt
+# RUN pip install --upgrade pip && pip install -r /opt/odoo/requirements.txt
+RUN pip install --no-cache-dir -r /opt/odoo/requirements.txt
 
 # Çalışma dizini
 WORKDIR /opt/odoo
